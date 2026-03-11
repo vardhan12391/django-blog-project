@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card p-4">
+  <img src="{{ user.profile.profile_image.url }}" width="120" class="rounded-circle mb-3">
+  <h3>{{ user.username }}</h3>
+  <p>{{ user.email }}</p>
+  <p>{{ user.profile.bio }}</p>
+</div>
+{% endblock %}

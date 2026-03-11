@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ post.title }}</h1>
+{% if post.image %}
+<img src="{{ post.image.url }}" class="img-fluid mb-3">
+{% elif post.image_url %}
+<img src="{{ post.image_url }}" class="img-fluid mb-3">
+{% endif %}
+
+{% if user.is_authenticated %}
+    {% if user.is_superuser or user.is_staff %}
+        <a href="/post/{{ post.id }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+        <a href="/post/{{ post.id }}/delete/" class="btn btn-danger btn-sm">Delete</a>
+    {% endif %}
+{% endif %}
+
+
+<hr>
+
+<p>{{ post.content }}</p>
+
+<hr>
+
+<p><b>Total Likes:</b> {{ total_likes }}</p>
+
+{% if user.is_authenticated %}
+<form method="post" action="/post/{{ post.id }}/like/">
+    {% csrf_token %}
+    <button class="btn btn-danger">❤️ Like</button>
+</form>
+{% else %}
+<p><a href="/accounts/login/">Login to like</a></p>
+{% endif %}
+
+<hr>
+
+<h3>Comments</h3>
+
+{% for comment in comments %}
+<div class="card mb-2 p-2">
+    <b>{{ comment.name }}</b>
+    <p>{{ comment.body }}</p>
+</div>
+{% empty %}
+<p>No comments yet.</p>
+{% endfor %}
+
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    <input class="form-control mb-3" name="name" placeholder="Your Name">
+    <textarea class="form-control mb-3" name="body" placeholder="Your Comment"></textarea>
+    <button class="btn btn-primary">Add Comment</button>
+</form>
+
+<a class="btn btn-secondary mt-3" href="/">Back Home</a>
+
+{% endblock %}
